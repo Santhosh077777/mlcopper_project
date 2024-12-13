@@ -75,13 +75,14 @@ conf_matrix = confusion_matrix(y_test_class, y_pred_class)
 print("Confusion Matrix:\n", conf_matrix)
 
 def predict_outcome(classifier, regressor, scaler, pca, user_data):
+    user_data = user_data[:, :8]
     user_data_scaled = scaler.transform(user_data)
     user_data_pca = pca.transform(user_data_scaled)
     prediction_class = classifier.predict(user_data_pca)
     prediction_price = regressor.predict(user_data_pca)
     return prediction_class, prediction_price
 
-user_data = np.array([[30153963, 30, 6, 28, 952, 628377, 5.9, -0.96, 6.46, 1, 4, 2021]])
+user_data = np.array([[30153963, 30, 6, 28, 952, 628377, 5.9, -0.96]])
 classification_prediction, price_prediction = predict_outcome(classifier, regressor, scaler, pca, user_data)
 
 if classification_prediction[0] == 1:
