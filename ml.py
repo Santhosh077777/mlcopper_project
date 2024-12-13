@@ -6,7 +6,7 @@ from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.metrics import mean_squared_error, accuracy_score, classification_report, confusion_matrix
 
-file_path = '/content/Copper_Set (1).xlsx'  
+file_path = '/content/Copper_Set (1).xlsx'  # Replace with your file path
 data = pd.ExcelFile(file_path)
 df = data.parse('Result 1')
 
@@ -74,16 +74,19 @@ print("Classification Report:\n", classification_report(y_test_class, y_pred_cla
 conf_matrix = confusion_matrix(y_test_class, y_pred_class)
 print("Confusion Matrix:\n", conf_matrix)
 
-def predict_classification(classifier, scaler, pca, user_data):
+def predict_outcome(classifier, regressor, scaler, pca, user_data):
     user_data_scaled = scaler.transform(user_data)
     user_data_pca = pca.transform(user_data_scaled)
     prediction_class = classifier.predict(user_data_pca)
-    return prediction_class
+    prediction_price = regressor.predict(user_data_pca)
+    return prediction_class, prediction_price
 
-user_data_classification = np.array([[30153963, 30, 6, 28, 952, 628377, 5.9, -0.96, 6.46, 1, 4, 2021]])
-classification_prediction = predict_classification(classifier, scaler, pca, user_data_classification)
+user_data = np.array([[30153963, 30, 6, 28, 952, 628377, 5.9, -0.96, 6.46, 1, 4, 2021]])
+classification_prediction, price_prediction = predict_outcome(classifier, regressor, scaler, pca, user_data)
 
 if classification_prediction[0] == 1:
-    print("Win")
+    print("Outcome: Win")
 else:
-    print("Lose")
+    print("Outcome: Lose")
+
+print(f"Predicted Price: {price_prediction[0]}")
